@@ -17,7 +17,7 @@ Este projeto desenvolve um sistema de IA baseado em Machine Learning para classi
 | Vinicius | P.O. e Desenvolvedor |
 | Natalia Cabrera | Desenvolvedora |
 | Rodrigo | Desenvolvedor |
-| Paula | Dados, Documentação e Dashboards |
+| Paola | Dados, Documentação e Dashboards |
 | Thamy | Dados, Documentação e Dashboards |
 
 ## 📁 Estrutura do Projeto
