@@ -53,11 +53,11 @@ def load_pcos_dataset(filepath: str) -> pd.DataFrame:
     if not os.path.exists(filepath):
         raise FileNotFoundError(
             f"Arquivo não encontrado: {filepath}\n"
-            f"Baixe o dataset em: https://www.kaggle.com/datasets/prasoonkottarathil/polycystic-ovary-syndrome-pcos"
+            f"Baixe o dataset em: https://www.kaggle.com/datasets/uciml/breast-cancer-wisconsin-data"
         )
 
     df = pd.read_csv(filepath)
-    print(f"Dataset PCOS carregado: {filepath}")
+    print(f"Dataset Breast Cancer carregado: {filepath}")
     print(f"Shape: {df.shape}")
 
     return df
