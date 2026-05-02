@@ -149,9 +149,9 @@ def plot_roc_curves(models: dict, X_test, y_test, save_path: str = None):
         except AttributeError:
             print(f"  {name}: predict_proba não disponível, pulando curva ROC")
 
-    ax.plot([0, 1], [0, 1], 'k--', alpha=0.5, label='Aleatório')
-    ax.set_xlabel('Taxa de Falsos Positivos', fontsize=12)
-    ax.set_ylabel('Taxa de Verdadeiros Positivos', fontsize=12)
+    ax.plot([0, 1], [0, 1], 'k--', alpha=0.5, label='Modelos')
+    ax.set_xlabel('Taxa de Falsos Positivos (FPR)', fontsize=12)
+    ax.set_ylabel('Taxa de Verdadeiros Positivos (TPR)', fontsize=12)
     ax.set_title('Curvas ROC - Comparação de Modelos', fontsize=14)
     ax.legend(loc='lower right', fontsize=10)
     ax.grid(True, alpha=0.3)
@@ -183,7 +183,7 @@ def explain_with_shap(model, X_test, feature_names: list,
         print(f"\nGerando explicações SHAP para {model_name}...")
 
         # Escolhe o explainer adequado
-        if hasattr(model, 'estimators_'):
+        if hasattr(model,'tree_') or hasattr(model, 'estimators_') or 'XGB' in model.__class__.__name__:
             # Tree-based models (Random Forest, XGBoost, etc.)
             explainer = shap.TreeExplainer(model)
         else:
@@ -196,8 +196,9 @@ def explain_with_shap(model, X_test, feature_names: list,
         plt.figure(figsize=(12, 8))
         shap.summary_plot(shap_values, X_test, feature_names=feature_names,
                           show=False)
-        plt.title(f'SHAP Summary Plot - {model_name}', fontsize=14)
-        plt.tight_layout()
+        plt.title(f'SHAP Summary Plot - {model_name}', fontsize=14, y=1.02)
+        plt.subplots_adjust(top=0.92)
+        # plt.tight_layout()
 
         if save_dir:
             os.makedirs(save_dir, exist_ok=True)
@@ -211,8 +212,9 @@ def explain_with_shap(model, X_test, feature_names: list,
         plt.figure(figsize=(12, 8))
         shap.summary_plot(shap_values, X_test, feature_names=feature_names,
                           plot_type="bar", show=False)
-        plt.title(f'SHAP Feature Importance - {model_name}', fontsize=14)
-        plt.tight_layout()
+        plt.title(f'SHAP Feature Importance - {model_name}', fontsize=14, y=1.02)
+        plt.subplots_adjust(top=0.92)
+        # plt.tight_layout()
 
         if save_dir:
             save_path = os.path.join(save_dir, f'shap_importance_{model_name.replace(" ", "_")}.png')
@@ -229,7 +231,6 @@ def explain_with_shap(model, X_test, feature_names: list,
     except Exception as e:
         print(f"Erro ao gerar SHAP para {model_name}: {e}")
         return None
-
 
 def get_feature_importance(model, feature_names: list,
                            model_name: str = "modelo", save_path: str = None):
@@ -266,3 +267,34 @@ def get_feature_importance(model, feature_names: list,
     plt.show()
 
     return df_imp
+
+def explain_knn_with_shap(model, X_train, X_test, feature_names,
+                          model_name='KNN', save_dir='../reports/figures',
+                          n_background=50, n_samples=50):
+    import os
+    import shap
+    import matplotlib.pyplot as plt
+
+    os.makedirs(save_dir, exist_ok=True)
+
+    X_train_sample = X_train[:n_background]
+    X_test_sample = X_test[:n_samples]
+
+    explainer = shap.KernelExplainer(model.predict_proba, X_train_sample)
+    shap_values = explainer.shap_values(X_test_sample)
+
+    plt.figure(figsize=(12, 8))
+    shap.summary_plot(
+        shap_values[1] if isinstance(shap_values, list) else shap_values,
+        X_test_sample,
+        feature_names=feature_names,
+        show=False
+    )
+    plt.tight_layout()
+    plt.savefig(f'{save_dir}/shap_summary_knn.png', dpi=300, bbox_inches='tight')
+    plt.show()
+
+    # plt.close()
+
+
+    return shap_values
