@@ -34,6 +34,12 @@ def load_breast_cancer_dataset(filepath: str = None) -> pd.DataFrame:
         df['diagnosis'] = df['target'].map({0: 'malignant', 1: 'benign'})
         print("Dataset carregado do sklearn.datasets")
 
+    # Normalizar nomes de colunas para snake_case
+    def _normalize(col: str) -> str:
+        return col.strip().lower().replace(' ', '_').replace('-', '_')
+
+    df.columns = [_normalize(c) for c in df.columns]
+
     print(f"Shape: {df.shape}")
     print(f"Colunas: {list(df.columns)}")
 
