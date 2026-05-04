@@ -11,6 +11,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
+from xgboost import XGBClassifier
 from sklearn.svm import SVC
 import joblib
 import os
@@ -44,6 +45,15 @@ def create_models() -> dict:
             class_weight='balanced',
             max_depth=10
         ),
+        'XGBoost': XGBClassifier(
+            n_estimators=100,
+            max_depth=4,
+            learning_rate=0.1,
+            subsample=0.8,
+            colsample_bytree=0.8,
+            eval_metric='logloss',
+            random_state=42
+        )
     }
 
     print(f"Modelos criados: {list(models.keys())}")

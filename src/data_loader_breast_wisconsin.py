@@ -34,6 +34,12 @@ def load_breast_cancer_dataset(filepath: str = None) -> pd.DataFrame:
         df['diagnosis'] = df['target'].map({0: 'malignant', 1: 'benign'})
         print("Dataset carregado do sklearn.datasets")
 
+    # Normalizar nomes de colunas para snake_case
+    def _normalize(col: str) -> str:
+        return col.strip().lower().replace(' ', '_').replace('-', '_')
+
+    df.columns = [_normalize(c) for c in df.columns]
+
     print(f"Shape: {df.shape}")
     print(f"Colunas: {list(df.columns)}")
 
@@ -53,11 +59,11 @@ def load_pcos_dataset(filepath: str) -> pd.DataFrame:
     if not os.path.exists(filepath):
         raise FileNotFoundError(
             f"Arquivo não encontrado: {filepath}\n"
-            f"Baixe o dataset em: https://www.kaggle.com/datasets/prasoonkottarathil/polycystic-ovary-syndrome-pcos"
+            f"Baixe o dataset em: https://www.kaggle.com/datasets/uciml/breast-cancer-wisconsin-data"
         )
 
     df = pd.read_csv(filepath)
-    print(f"Dataset PCOS carregado: {filepath}")
+    print(f"Dataset Breast Cancer carregado: {filepath}")
     print(f"Shape: {df.shape}")
 
     return df
