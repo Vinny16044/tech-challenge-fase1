@@ -36,10 +36,6 @@ Este projeto desenvolve um sistema de Machine Learning para classificação de d
 - **Target:** Diagnóstico (Maligno/Benigno)
 - **Arquivo:** `data/raw/DatasetComplementarTumoral.csv`
 
-### Dataset Complementar PCOS
-- **Fonte:** Kaggle - Polycystic Ovary Syndrome
-- **Registros:** 541
-- **Arquivo:** `data/raw/PCOS_infertility.csv`
 
 ## Resultados
 
@@ -103,15 +99,15 @@ tech-challenge-fase1/
 │   └── ...
 │
 ├── reports/
-│   ├── AI_Prediction_Results.xlsx       # Resultados em planilha
-│   ├── seer_comparacao_modelos.csv      # Métricas comparativas SEER
-│   ├── wisconsin_comparacao_modelos.csv # Métricas comparativas Wisconsin
 │   └── figures/
 │       ├── seer/                        # Figuras do pipeline SEER
 │       └── wisconsin/                   # Figuras do pipeline Wisconsin
 │
 └── results/
-    └── comparacao_modelos.csv           # Resultados consolidados
+    ├── AI_Prediction_SEER.xlsx          # Predições por modelo (SEER)
+    ├── AI_Prediction_Wisconsin.xlsx     # Predições por modelo (Wisconsin)
+    ├── seer_comparacao_modelos.csv      # Métricas comparativas SEER
+    └── wisconsin_comparacao_modelos.csv # Métricas comparativas Wisconsin
 ```
 
 ## Como Executar
