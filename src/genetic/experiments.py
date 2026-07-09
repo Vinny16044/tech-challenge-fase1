@@ -1,9 +1,6 @@
 """
 Módulo de experimentos da Fase 2.
 Responsável: Paola
-
-Executa cenários de otimização, compara modelos originais vs. otimizados
-e salva os resultados para análise.
 """
 
 import os
@@ -43,13 +40,6 @@ EXPERIMENT_CONFIGS = [
 
 
 def get_mock_best_params() -> dict:
-    """
-    Parâmetros temporários para simular a saída do Algoritmo Genético.
-
-    Quando o motor genético estiver pronto, esta função será substituída
-    pela chamada real ao AG.
-    """
-
     return {
         "Regressão Logística": {
             "C": 0.5,
@@ -95,9 +85,6 @@ def run_phase2_experiments(
     y_test,
     output_dir: str = "results/fase2"
 ) -> pd.DataFrame:
-    """
-    Executa os experimentos da Fase 2 e compara modelos originais vs. otimizados.
-    """
 
     os.makedirs(output_dir, exist_ok=True)
     log_path = setup_logger()
@@ -163,23 +150,10 @@ def run_phase2_experiments(
 
     df_comparison.to_csv(output_path, index=False, encoding="utf-8-sig")
 
-    # Geração automática dos gráficos
     try:
-        plot_baseline_vs_optimized(
-            df_comparison,
-            metric="recall"
-        )
-
-        plot_baseline_vs_optimized(
-            df_comparison,
-            metric="accuracy"
-        )
-
-        plot_baseline_vs_optimized(
-            df_comparison,
-            metric="f1"
-        )
-
+        plot_baseline_vs_optimized(df_comparison, metric="recall")
+        plot_baseline_vs_optimized(df_comparison, metric="accuracy")
+        plot_baseline_vs_optimized(df_comparison, metric="f1")
     except Exception as e:
         print(f"Erro ao gerar gráficos: {e}")
 
