@@ -30,3 +30,7 @@ Thumbs.db
 # Models
 results/*.pkl
 results/*.joblib
+
+results/
+reports/figures/fase2/
+*.log

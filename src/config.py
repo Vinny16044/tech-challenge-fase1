@@ -17,6 +17,9 @@ PROCESSED_DIR = os.path.join(DATA_DIR, 'processed')
 REPORTS_DIR = os.path.join(BASE_DIR, 'reports')
 FIGURES_DIR = os.path.join(REPORTS_DIR, 'figures')
 MODELS_DIR = os.path.join(BASE_DIR, 'models')
+RESULTS_DIR = os.path.join(BASE_DIR, 'results')
+PHASE2_RESULTS_DIR = os.path.join(RESULTS_DIR, 'fase2')
+PHASE2_LOGS_DIR = os.path.join(PHASE2_RESULTS_DIR, 'logs')
 
 # Datasets
 DATASET_SEER_CLINICO = os.path.join(RAW_DIR, 'DatasetPrincipalClinico.csv')
@@ -106,12 +109,20 @@ VIZ = {
     'palette': 'Set2',
 }
 
-
 def ensure_dirs():
     """Cria os diretórios necessários se não existirem."""
-    for d in [DATA_DIR, RAW_DIR, PROCESSED_DIR, REPORTS_DIR, FIGURES_DIR, MODELS_DIR]:
+    for d in [
+        DATA_DIR,
+        RAW_DIR,
+        PROCESSED_DIR,
+        REPORTS_DIR,
+        FIGURES_DIR,
+        MODELS_DIR,
+        RESULTS_DIR,
+        PHASE2_RESULTS_DIR,
+        PHASE2_LOGS_DIR
+    ]:
         os.makedirs(d, exist_ok=True)
-
 
 if __name__ == '__main__':
     ensure_dirs()
