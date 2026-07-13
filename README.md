@@ -147,6 +147,9 @@ python main.py --no-figures
 
 # Sem salvar modelos em disco
 python main.py --no-models
+
+# Com explicação em linguagem natural via LLM (Gemini) ao final
+python main.py --dataset wisconsin --explain
 ```
 
 ### Execução dos Notebooks
@@ -191,6 +194,55 @@ Utilizamos SHAP (SHapley Additive exPlanations) para garantir transparência nas
 **Features mais importantes (SEER):** Survival Months, Node_Ratio, Tumor Size, N Stage, Estrogen Status
 
 **Features mais importantes (Wisconsin):** concave points_worst, perimeter_worst, radius_worst, area_worst, concavity_mean
+
+## Interpretação via LLM (Gemini)
+
+A Fase 2 adiciona uma camada de interpretação em linguagem natural que traduz as
+saídas numéricas dos modelos (predição, probabilidade e importância de features
+via SHAP) e os resultados da otimização genética em explicações acionáveis para
+profissionais de saúde. A integração usa o **Google Gemini** (tier gratuito) e
+inclui uma camada de perguntas e respostas sobre as predições.
+
+Módulos (em `src/llm/`):
+
+- `prompts.py` - prompt engineering com contexto médico, tom e formato definidos.
+- `interpreter.py` - classe `LLMInterpreter` (adapter Gemini + fallback offline).
+
+### Configuração da chave
+
+Obtenha uma chave gratuita em https://aistudio.google.com/apikey e defina a
+variável de ambiente (a chave **nunca** deve ser escrita no código-fonte):
+
+```bash
+# Linux/Mac
+export GEMINI_API_KEY="sua-chave"
+
+# Windows (PowerShell)
+setx GEMINI_API_KEY "sua-chave"
+```
+
+Sem a chave definida, o interpretador cai automaticamente num **modo offline
+determinístico**, garantindo que o projeto rode e seja testável em qualquer
+ambiente (útil para reprodutibilidade e para a suíte de testes).
+
+### Uso
+
+```bash
+# Demonstração completa (predição + otimização + Q&A)
+python notebooks/03_llm_interpret.py
+
+# Ou integrado ao pipeline
+python main.py --dataset wisconsin --explain
+```
+
+```python
+from llm.interpreter import LLMInterpreter, PatientCase
+
+interpreter = LLMInterpreter(model="gemini-flash-latest")
+caso = PatientCase(model_name="Random Forest", dataset="wisconsin",
+                   prediction=1, probability=0.87)
+print(interpreter.explain_prediction(caso))
+```
 
 ## Aviso Importante
 
