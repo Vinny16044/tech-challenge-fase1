@@ -121,4 +121,5 @@ def test_sem_api_key_usa_offline(monkeypatch):
     monkeypatch.delenv("GEMINI_API_KEY", raising=False)
     monkeypatch.delenv("GOOGLE_API_KEY", raising=False)
     interp = LLMInterpreter(api_key=None)
+    interp.api_key = None  # ignora eventual .env presente no ambiente de dev
     assert interp.is_llm_available() is False

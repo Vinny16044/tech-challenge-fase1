@@ -9,6 +9,7 @@ build/
 # Virtual Environment / Poetry
 venv/
 .env/
+.env
 .venv/
 
 # Jupyter

@@ -28,6 +28,33 @@ from typing import Any, Dict, List, Optional, Tuple
 from . import prompts
 
 
+def _load_dotenv_once() -> None:
+    """
+    Carrega variáveis de um arquivo .env na raiz do projeto para o ambiente,
+    sem depender de pacotes externos. Só define chaves ainda não presentes em
+    os.environ. Silencioso se o arquivo não existir.
+    """
+    root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    env_path = os.path.join(root, ".env")
+    if not os.path.isfile(env_path):
+        return
+    try:
+        with open(env_path, encoding="utf-8") as fh:
+            for linha in fh:
+                linha = linha.strip()
+                if not linha or linha.startswith("#") or "=" not in linha:
+                    continue
+                chave, _, valor = linha.partition("=")
+                chave, valor = chave.strip(), valor.strip().strip('"').strip("'")
+                if chave and chave not in os.environ:
+                    os.environ[chave] = valor
+    except OSError:
+        pass
+
+
+_load_dotenv_once()
+
+
 # ============================================================
 # ESTRUTURAS DE ENTRADA (contratos)
 # ============================================================
